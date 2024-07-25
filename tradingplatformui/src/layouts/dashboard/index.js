@@ -44,7 +44,7 @@ function Dashboard() {
       <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
+            {/* <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="dark"
                 icon="weekend"
@@ -56,10 +56,10 @@ function Dashboard() {
                   label: "than lask week",
                 }}
               />
-            </MDBox>
+            </MDBox> */}
           </Grid>
           <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
+            {/* <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="leaderboard"
                 title="Today's Users"
@@ -70,10 +70,10 @@ function Dashboard() {
                   label: "than last month",
                 }}
               />
-            </MDBox>
+            </MDBox> */}
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5}>
+          {/* <Grid item xs={12} md={6} lg={3}>
+             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="success"
                 icon="store"
@@ -86,8 +86,8 @@ function Dashboard() {
                 }}
               />
             </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
+          </Grid> */}
+          {/* <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="primary"
@@ -101,21 +101,10 @@ function Dashboard() {
                 }}
               />
             </MDBox>
-          </Grid>
+          </Grid> */}
         </Grid>
         <MDBox mt={4.5}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsBarChart
-                  color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
-                  chart={reportsBarChartData}
-                />
-              </MDBox>
-            </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <MDBox mb={3}>
                 <ReportsLineChart
@@ -130,9 +119,9 @@ function Dashboard() {
                   chart={sales}
                 />
               </MDBox>
-            </Grid>
+            </Grid> 
             <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
+              {/* <MDBox mb={3}>
                 <ReportsLineChart
                   color="dark"
                   title="completed tasks"
@@ -140,7 +129,7 @@ function Dashboard() {
                   date="just updated"
                   chart={tasks}
                 />
-              </MDBox>
+              </MDBox> */}
             </Grid>
           </Grid>
         </MDBox>
