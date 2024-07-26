@@ -25,9 +25,6 @@ import MDBox from "components/MDBox";
 // Material Dashboard 2 React example components
 import PageLayout from "examples/LayoutContainers/PageLayout";
 
-// Authentication pages components
-import Footer from "layouts/authentication/components/Footer";
-
 function BasicLayout({ image, children }) {
   return (
     <PageLayout>
@@ -54,7 +51,6 @@ function BasicLayout({ image, children }) {
           </Grid>
         </Grid>
       </MDBox>
-      <Footer light />
     </PageLayout>
   );
 }

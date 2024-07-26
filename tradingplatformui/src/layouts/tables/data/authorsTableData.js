@@ -53,22 +53,22 @@ export default function data() {
       { Header: "author", accessor: "author", width: "45%", align: "left" },
       { Header: "function", accessor: "function", align: "left" },
       { Header: "status", accessor: "status", align: "center" },
-      { Header: "employed", accessor: "employed", align: "center" },
+      { Header: "timezone", accessor: "timezone", align: "center" },
       { Header: "action", accessor: "action", align: "center" },
     ],
 
     rows: [
       {
-        author: <Author image={team2} name="John Michael" email="john@creative-tim.com" />,
-        function: <Job title="Manager" description="Organization" />,
+        author: <Author image={team2} name="John Michael" email="john@nomura.com" />,
+        function: <Job title="Profolio Manager" description="Investment Banking" />,
         status: (
           <MDBox ml={-1}>
             <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
           </MDBox>
         ),
-        employed: (
+        timezone: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            23/04/18
+            EST
           </MDTypography>
         ),
         action: (
@@ -78,16 +78,16 @@ export default function data() {
         ),
       },
       {
-        author: <Author image={team3} name="Alexa Liras" email="alexa@creative-tim.com" />,
-        function: <Job title="Programator" description="Developer" />,
+        author: <Author image={team3} name="Alexa Liras" email="alexa@nomura.com" />,
+        function: <Job title="Risk Manager" description="Investment Banking" />,
         status: (
           <MDBox ml={-1}>
             <MDBadge badgeContent="offline" color="dark" variant="gradient" size="sm" />
           </MDBox>
         ),
-        employed: (
+        timezone: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            11/01/19
+            EST
           </MDTypography>
         ),
         action: (
@@ -97,16 +97,16 @@ export default function data() {
         ),
       },
       {
-        author: <Author image={team4} name="Laurent Perrier" email="laurent@creative-tim.com" />,
-        function: <Job title="Executive" description="Projects" />,
+        author: <Author image={team4} name="Laurent Perrier" email="laurent@nomura.com" />,
+        function: <Job title="Compliance Officer" description="Compliance & Legal" />,
         status: (
           <MDBox ml={-1}>
             <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
           </MDBox>
         ),
-        employed: (
+        timezone: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            19/09/17
+            CST
           </MDTypography>
         ),
         action: (
@@ -116,16 +116,16 @@ export default function data() {
         ),
       },
       {
-        author: <Author image={team3} name="Michael Levi" email="michael@creative-tim.com" />,
-        function: <Job title="Programator" description="Developer" />,
+        author: <Author image={team3} name="Michael Levi" email="michael@nomura.com" />,
+        function: <Job title="Analyst" description="Global Markets" />,
         status: (
           <MDBox ml={-1}>
             <MDBadge badgeContent="online" color="success" variant="gradient" size="sm" />
           </MDBox>
         ),
-        employed: (
+        timezone: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            24/12/08
+            EST
           </MDTypography>
         ),
         action: (
@@ -135,16 +135,16 @@ export default function data() {
         ),
       },
       {
-        author: <Author image={team3} name="Richard Gran" email="richard@creative-tim.com" />,
-        function: <Job title="Manager" description="Executive" />,
+        author: <Author image={team3} name="Richard Gran" email="richard@nomura.com" />,
+        function: <Job title="Analyst" description="Investment Banking" />,
         status: (
           <MDBox ml={-1}>
             <MDBadge badgeContent="offline" color="dark" variant="gradient" size="sm" />
           </MDBox>
         ),
-        employed: (
+        timezone: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            04/10/21
+            CST
           </MDTypography>
         ),
         action: (
@@ -154,16 +154,16 @@ export default function data() {
         ),
       },
       {
-        author: <Author image={team4} name="Miriam Eric" email="miriam@creative-tim.com" />,
-        function: <Job title="Programator" description="Developer" />,
+        author: <Author image={team4} name="Miriam Eric" email="miriam@nomura.com" />,
+        function: <Job title="Technology Analyst" description="Global Markets" />,
         status: (
           <MDBox ml={-1}>
             <MDBadge badgeContent="offline" color="dark" variant="gradient" size="sm" />
           </MDBox>
         ),
-        employed: (
+        timezone: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            14/09/20
+            EST
           </MDTypography>
         ),
         action: (
