@@ -77,13 +77,16 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="dark"
-                icon="weekend"
-                title="Bookings"
-                count={281}
-                percentage={{
-                  color: "success",
-                  amount: "+55%",
-                  label: "than lask week",
+                icon="ibm-svgrepo-com.svg"
+                title="IBM"
+                count={192.3}
+                highest={{
+                   color: "success",
+                   amount: "180.6",
+                 }}
+                lowest={{
+                  color: "error",
+                  amount: "203.1",
                 }}
               />
             </MDBox>
@@ -91,14 +94,17 @@ function Dashboard() {
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
-                icon="leaderboard"
-                title="Today's Users"
-                count="2,300"
-                percentage={{
+                icon="microsoft-logo.svg"
+                title="MSFT"
+                count="423.8"
+                highest={{
                   color: "success",
-                  amount: "+3%",
-                  label: "than last month",
+                  amount: "410.6",
                 }}
+               lowest={{
+                 color: "error",
+                 amount: "431.1",
+               }}
               />
             </MDBox>
           </Grid>
@@ -106,14 +112,17 @@ function Dashboard() {
              <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="success"
-                icon="store"
-                title="Revenue"
-                count="34k"
-                percentage={{
+                icon="tesla.svg"
+                title="TSLA"
+                count="216.92"
+                highest={{
                   color: "success",
-                  amount: "+1%",
-                  label: "than yesterday",
+                  amount: "188.6",
                 }}
+               lowest={{
+                 color: "error",
+                 amount: "230.1",
+               }}
               />
             </MDBox>
           </Grid>
@@ -121,28 +130,21 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 color="primary"
-                icon="person_add"
-                title="Followers"
-                count="+91"
-                percentage={{
+                icon="race.jpg"
+                title="RACE"
+                count="412.65"
+                highest={{
                   color: "success",
-                  amount: "",
-                  label: "Just updated",
+                  amount: "450.2",
                 }}
+               lowest={{
+                 color: "error",
+                 amount: "410.1",
+               }}
               />
             </MDBox>
           </Grid>
         </Grid>
-        <MDBox>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={8}>
-              <Projects />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <OrdersOverview />
-            </Grid>
-          </Grid>
-        </MDBox>
       </MDBox>
       <Footer />
     </DashboardLayout>

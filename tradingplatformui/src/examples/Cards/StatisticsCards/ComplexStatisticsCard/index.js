@@ -25,13 +25,12 @@ import Icon from "@mui/material/Icon";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 
-function ComplexStatisticsCard({ color, title, count, percentage, icon }) {
+function ComplexStatisticsCard({ color, title, count, highest, lowest, icon }) {
   return (
     <Card>
       <MDBox display="flex" justifyContent="space-between" pt={1} px={2}>
         <MDBox
           variant="gradient"
-          bgColor={color}
           color={color === "light" ? "dark" : "white"}
           coloredShadow={color}
           borderRadius="xl"
@@ -42,9 +41,7 @@ function ComplexStatisticsCard({ color, title, count, percentage, icon }) {
           height="4rem"
           mt={-3}
         >
-          <Icon fontSize="medium" color="inherit">
-            {icon}
-          </Icon>
+         <img src={icon}  width="60em" height="60rem" alt="icon" class="card-icon"/>
         </MDBox>
         <MDBox textAlign="right" lineHeight={1.25}>
           <MDTypography variant="button" fontWeight="light" color="text">
@@ -56,15 +53,26 @@ function ComplexStatisticsCard({ color, title, count, percentage, icon }) {
       <Divider />
       <MDBox pb={2} px={2}>
         <MDTypography component="p" variant="button" color="text" display="flex">
-          <MDTypography
+          Highest : <MDTypography
             component="span"
             variant="button"
             fontWeight="bold"
-            color={percentage.color}
+            color={highest.color}
           >
-            {percentage.amount}
+            {highest.amount}
           </MDTypography>
-          &nbsp;{percentage.label}
+          &nbsp;
+        </MDTypography>
+        <MDTypography component="p" variant="button" color="text" display="flex">
+        Lowest : <MDTypography
+            component="span"
+            variant="button"
+            fontWeight="bold"
+            color={lowest.color}
+          >
+            {lowest.amount}
+          </MDTypography>
+          &nbsp;
         </MDTypography>
       </MDBox>
     </Card>
@@ -74,11 +82,14 @@ function ComplexStatisticsCard({ color, title, count, percentage, icon }) {
 // Setting default values for the props of ComplexStatisticsCard
 ComplexStatisticsCard.defaultProps = {
   color: "info",
-  percentage: {
+ highest: {
     color: "success",
     text: "",
-    label: "",
   },
+  lowest: {
+    color: "success",
+    text: "",
+  }
 };
 
 // Typechecking props for the ComplexStatisticsCard
@@ -95,7 +106,7 @@ ComplexStatisticsCard.propTypes = {
   ]),
   title: PropTypes.string.isRequired,
   count: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  percentage: PropTypes.shape({
+  highest: PropTypes.shape({
     color: PropTypes.oneOf([
       "primary",
       "secondary",
@@ -107,7 +118,19 @@ ComplexStatisticsCard.propTypes = {
       "white",
     ]),
     amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    label: PropTypes.string,
+  }),
+  lowest: PropTypes.shape({
+    color: PropTypes.oneOf([
+      "primary",
+      "secondary",
+      "info",
+      "success",
+      "warning",
+      "error",
+      "dark",
+      "white",
+    ]),
+    amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   icon: PropTypes.node.isRequired,
 };
