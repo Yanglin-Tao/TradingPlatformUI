@@ -54,7 +54,7 @@ function Overview() {
       <DashboardNavbar />
       <MDBox mb={2} />
       <Header updateSelect={setTabValue}>
-        {tabValue === "app" && (
+        {(tabValue === "" || tabValue === "app") && (
           <>
             <MDBox mt={5} mb={3}>
               <Grid container spacing={1}>
