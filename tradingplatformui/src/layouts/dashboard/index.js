@@ -36,40 +36,99 @@ import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 
 function Dashboard() {
-  const { sales, tasks } = reportsLineChartData;
+  const stockData = [
+    {
+      labels: [
+        "00:00:00",
+        "00:00:02", 
+        "00:00:04", 
+        "00:00:06", 
+        "00:00:08", 
+        "00:00:10", 
+        "00:00:12", 
+        "00:00:14", 
+        "00:00:16", 
+        "00:00:18"
+      ],
+      datasets: {
+        label: "IBM",
+        data: [181.44, 182.44, 183.44, 181.44, 183.44, 181.44, 184.44, 182.44, 183.44]
+      }
+    },
+    {
+      labels: [
+        "00:00:00",
+        "00:00:02", 
+        "00:00:04", 
+        "00:00:06", 
+        "00:00:08", 
+        "00:00:10", 
+        "00:00:12", 
+        "00:00:14", 
+        "00:00:16", 
+        "00:00:18"
+      ],
+      datasets: {
+        label: "MSFT",
+        data: [407.73, 401.73, 406.73, 405.73, 402.73, 403.73, 401.73, 406.73, 405.73]
+      }
+    },
+    {
+      labels: [
+        "00:00:00",
+        "00:00:02", 
+        "00:00:04", 
+        "00:00:06", 
+        "00:00:08", 
+        "00:00:10", 
+        "00:00:12", 
+        "00:00:14", 
+        "00:00:16", 
+        "00:00:18"
+      ],
+      datasets: {
+        label: "TSLA",
+        data: [141.73, 144.73, 142.73, 141.73, 143.73, 141.73, 144.73, 143.73, 144.73]
+      }
+    },
+    {
+      labels: [
+        "00:00:00",
+        "00:00:02", 
+        "00:00:04", 
+        "00:00:06", 
+        "00:00:08", 
+        "00:00:10", 
+        "00:00:12", 
+        "00:00:14", 
+        "00:00:16", 
+        "00:00:18"
+      ],
+      datasets: {
+        label: "RACE",
+        data: [425.6, 426.6, 427.6, 423.6, 422.6, 423.6, 424.6, 426.6, 421.6]
+      }
+    }
+  ];
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox py={3}>
         <MDBox mt={4.5}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={4}>
-              <MDBox mb={3}>
-                <ReportsLineChart
-                  color="success"
-                  title="daily sales"
-                  description={
-                    <>
-                      (<strong>+15%</strong>) increase in today sales.
-                    </>
-                  }
-                  date="updated 4 min ago"
-                  chart={sales}
-                />
-              </MDBox>
-            </Grid> 
-            <Grid item xs={12} md={6} lg={4}>
-              {/* <MDBox mb={3}>
-                <ReportsLineChart
-                  color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
-                  date="just updated"
-                  chart={tasks}
-                />
-              </MDBox> */}
-            </Grid>
+          <Grid container spacing={3}> 
+            {stockData.map((stock, index) => (
+              <Grid item xs={12} md={6} lg={4} key={index}>
+                <MDBox mb={3}>
+                  <ReportsLineChart
+                    color="dark"
+                    title={stock.datasets.label}
+                    date="updated 2 seconds ago"
+                    chart={stock}
+                  />
+                </MDBox>
+              </Grid>
+            ))}
           </Grid>
         </MDBox>
         <Grid container spacing={3}>
