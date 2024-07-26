@@ -45,6 +45,7 @@ import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import TransactionsWrapper from "layouts/billing/components/TransactionsWrapper";
 
 const routes = [
   {
@@ -61,7 +62,7 @@ const routes = [
     key: "billing",
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/billing",
-    component: <Billing />,
+    component: <TransactionsWrapper/>,
   },
   {
     type: "collapse",
