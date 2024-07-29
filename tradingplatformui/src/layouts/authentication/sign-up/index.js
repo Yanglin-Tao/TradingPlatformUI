@@ -31,7 +31,108 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 // Images
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
 
+import React, { useState } from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 function Cover() {
+  const [open, setOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState('info');
+
+  const [usernameError, setUsernameError] = React.useState('');
+  const [emailError, setEmailError] = React.useState('');
+  const [passwordError, setPasswordError] = React.useState('');
+
+  const usernameRegex = /^[^\s]{3,20}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
+
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    const username = data.get('username');
+    const email = data.get('email');
+    const password = data.get('password');
+
+    const apiUrl = `http://127.0.0.1:8000/app/signup/`;
+
+    if (!usernameRegex.test(username)) {
+      setUsernameError('Usernames must be between 3 and 20 characters long and cannot contain space.');
+      return;
+    } else {
+      setUsernameError('');
+    }
+
+    if (!emailRegex.test(email)) {
+      setEmailError('Please enter a valid email address.');
+      return;
+    } else {
+      setEmailError('');
+    }
+    if (!passwordRegex.test(password)) {
+      setPasswordError('Password must contain at least one uppercase letter and be at least 8 characters long.');
+      return;
+    } else {
+      setPasswordError('');
+    }
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, email, password })
+    };
+
+    try {
+      const response = await fetch(apiUrl, requestOptions);
+      const data = await response.json();
+
+      const message = data.message;
+
+      if (message === "Successfully Registered!") {
+        setAlertSeverity('success');
+        setAlertMessage(message);
+        setOpen(true);
+        setTimeout(() => {
+          window.open('/authentication/sign-in', '_self');
+        }, 800);
+      } else {
+        setAlertSeverity('error');
+        setAlertMessage(message);
+        setOpen(true);
+      }
+    } catch (error) {
+      setAlertSeverity('error');
+      setAlertMessage('An error occurred while processing your request. Please try again.');
+      setOpen(true);
+    }
+  };
+
   return (
     <CoverLayout image={bgImage}>
       <Card>
@@ -50,23 +151,53 @@ function Cover() {
             Join us today
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your email and password to register
+            Enter your username, email and password to register
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+          <MDBox component="form" role="form" onSubmit={handleSubmit}>
             <MDBox mb={2}>
-              <MDInput type="text" label="Name" variant="standard" fullWidth />
+              <MDInput 
+                  type="text" 
+                  name="username"
+                  label="Username" 
+                  variant="standard" 
+                  value={formData.username}
+                  onChange={handleChange}
+                  error={!!usernameError}
+                  helperText={usernameError}
+                  fullWidth 
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
+              <MDInput 
+                  type="email" 
+                  name="email"
+                  label="Email" 
+                  variant="standard" 
+                  value={formData.email}
+                  onChange={handleChange}
+                  error={!!emailError}
+                  helperText={emailError}
+                  fullWidth 
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" variant="standard" fullWidth />
+              <MDInput 
+                  type="password" 
+                  name="password"
+                  label="Password" 
+                  variant="standard" 
+                  value={formData.password}
+                  onChange={handleChange}
+                  error={!!passwordError}
+                  helperText={passwordError}
+                  fullWidth 
+              />
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
+              <MDButton type="submit" variant="gradient" color="info" fullWidth>
+                sign up
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
@@ -84,6 +215,15 @@ function Cover() {
                 </MDTypography>
               </MDTypography>
             </MDBox>
+            <Snackbar
+              open={open}
+              autoHideDuration={6000}
+              onClose={handleClose}
+            >
+              <Alert onClose={handleClose} severity={alertSeverity} sx={{ width: '100%' }}>
+                {alertMessage}
+              </Alert>
+            </Snackbar>
           </MDBox>
         </MDBox>
       </Card>
