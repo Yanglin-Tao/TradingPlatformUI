@@ -50,7 +50,7 @@ const PopoverElement = () => {
 
   return (
     <div >
-      <Button aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
+      <Button aria-describedby={id} onClick={handleClick} variant="contained" size="large">
         Trade
       </Button>
       <Popover

@@ -111,6 +111,10 @@ function Dashboard() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <div sx={{float:"right"}}>
+        <PopoverElement sx={{float:"right"}}/>
+      </div>
+     
       <MDBox py={3}>
         <MDBox mt={4.5}>
           <Grid container spacing={3}> 
@@ -128,7 +132,11 @@ function Dashboard() {
             ))}
           </Grid>
         </MDBox>
+
+    
         <Grid container spacing={3}>
+       
+
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
