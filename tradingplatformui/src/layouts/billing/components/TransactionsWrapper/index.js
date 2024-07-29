@@ -6,7 +6,6 @@ import MDBox from "components/MDBox";
 // Material Dashboard 2 React examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
 
 // Billing page components
 import Invoices from "layouts/billing/components/Invoices";
@@ -30,7 +29,6 @@ function TransactionsWrapper() {
           </Grid>
         </MDBox>
       </MDBox>
-      <Footer />
     </DashboardLayout>
   );
 }
