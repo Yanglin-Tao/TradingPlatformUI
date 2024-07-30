@@ -33,7 +33,81 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
+import React from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Cookies from 'js-cookie';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 function Basic() {
+
+  const [open, setOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState('info');
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    const email = data.get('email');
+    const password = data.get('password');
+
+    const apiUrl = `http://127.0.0.1:8000/app/login/`;
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    };
+
+    try {
+      const response = await fetch(apiUrl, requestOptions);
+      const data = await response.json();
+
+      const message = data.message;
+
+      if (message === "You are now logged in!") {
+        Cookies.set('userEmail', email, { expires: 1/24 }); 
+        setAlertSeverity('success');
+        setAlertMessage(message);
+        setOpen(true);
+        setTimeout(() => {
+          window.open('/dashboard', '_self');
+        }, 800);
+      } else {
+        setAlertSeverity('error');
+        setAlertMessage(message);
+        setOpen(true);
+      }
+    } catch (error) {
+      setAlertSeverity('error');
+      setAlertMessage('An error occurred while processing your request. Please try again.');
+      setOpen(true);
+    }
+  };
+
   return (
     <BasicLayout image={bgImage}>
       <Card>
@@ -53,15 +127,29 @@ function Basic() {
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+          <MDBox component="form" role="form" onSubmit={handleSubmit}>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
+              <MDInput 
+                type="email" 
+                name="email"
+                label="Email" 
+                value={formData.email}
+                onChange={handleChange}
+                fullWidth 
+              />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput 
+                type="password" 
+                name="password"
+                label="Password" 
+                value={formData.password}
+                onChange={handleChange}
+                fullWidth 
+              />
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton type="submit" variant="gradient" color="info" fullWidth>
                 sign in
               </MDButton>
             </MDBox>
@@ -80,6 +168,15 @@ function Basic() {
                 </MDTypography>
               </MDTypography>
             </MDBox>
+            <Snackbar
+              open={open}
+              autoHideDuration={6000}
+              onClose={handleClose}
+            >
+              <Alert onClose={handleClose} severity={alertSeverity} sx={{ width: '100%' }}>
+                {alertMessage}
+              </Alert>
+            </Snackbar>
           </MDBox>
         </MDBox>
       </Card>

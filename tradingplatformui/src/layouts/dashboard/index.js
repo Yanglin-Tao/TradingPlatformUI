@@ -32,6 +32,9 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 // Dashboard components
 import PopoverElement from "layouts/billing/components/Popover";
 
+import Cookies from 'js-cookie';
+import { useEffect } from "react";
+
 function Dashboard() {
   const stockData = [
     {
@@ -107,6 +110,19 @@ function Dashboard() {
       }
     }
   ];
+
+  useEffect(() => {
+    const checkCookie = () => {
+      const userEmail = Cookies.get('userEmail');
+      if (userEmail) {
+        console.log('User email cookie:', userEmail);
+      } else {
+        console.log('User email cookie is not set');
+      }
+    };
+    checkCookie();
+  }, []);
+
 
   return (
     <DashboardLayout>
