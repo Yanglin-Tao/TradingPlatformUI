@@ -72,7 +72,7 @@ const PopoverElement = () => {
   }
 
   const handleOperation = (event) =>{
-    if (event.target.text === "buy"){
+    if (event.target.value === "buy"){
       setOperation("Buy");
     }
     else {
