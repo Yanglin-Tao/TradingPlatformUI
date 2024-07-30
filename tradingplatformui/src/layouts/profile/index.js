@@ -12,7 +12,7 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
@@ -45,12 +45,48 @@ import profilesListData from "layouts/profile/data/profilesListData";
 // Images
 import Billing from "layouts/billing";
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const SERVER_API = "http://127.0.0.1:8000/app/";
 
-function Overview({history}) {
+function Overview() {
   const [tabValue, setTabValue] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   let navigate = useNavigate();
+ 
+  useEffect( ()=>{
+    const checkCookie = async() => {
+      const email = Cookies.get('userEmail');
+      if (email) {
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body :JSON.stringify({
+            "email" : email
+          })
+        };
+        try {
+          const response = await fetch( SERVER_API + "userprofile/", requestOptions);
+          let data = await response.json();
+          let message = data.message;
+
+          if (message === "Here is the user profile") {
+            setUserName(data.user.username);
+            setUserEmail(email)
+          }
+        }catch(error){
+          alert("No user found");
+        }
+
+      } else {
+        console.log('User email cookie is not set');
+      }
+    };
+    checkCookie();
+  }, [])
 
   const handleDeleteAccount = async() =>{
     const requestOptions = {
@@ -72,15 +108,21 @@ function Overview({history}) {
     }
   }
 
-  const handleEditPassword = () => {
-    let passwordText = document.getElementById("password-text");
-    passwordText.innerHTML = '<input value="' +  passwordText.innerText + '">';
+  const handleEditUserName = () => {
+    let usernameText = document.getElementById("username-text");
+    if (usernameText.innerText !== ""){
+      usernameText.innerHTML = '<input style="height:30px" value="' +  usernameText.innerText + '">';
 
-    let passwordBox = document.getElementById("password-box");
-    let submitButton = document.createElement("Button");
-    submitButton.innerText = "Update"
-    
-    passwordBox.appendChild(submitButton)
+      let passwordBox = document.getElementById("username-box");
+      let submitButton = document.createElement("Button");
+      submitButton.innerText = "Update"
+  
+      let editText = document.getElementById("edit-username-text");
+      editText.innerText = "Update Username"
+      
+      //passwordBox.appendChild(submitButton)
+    }
+   
   }
 
   return (
@@ -191,8 +233,9 @@ function Overview({history}) {
                             variant="button"
                             fontWeight="medium"
                             textTransform="capitalize"
+                            id="username-text"
                           >
-                            "Name"
+                            {userName}
                           </MDTypography>
 
                           <MDBox display="flex" alignItems="center">
@@ -201,8 +244,8 @@ function Overview({history}) {
                                 <Icon >delete account</Icon>&nbsp;delete account
                               </MDButton>
                             </MDBox>
-                            <MDButton variant="text" color={"dark"}  onClick={handleEditPassword} >
-                              <Icon>edit password</Icon>&nbsp;<span id="edit-password-text">edit password</span>
+                            <MDButton variant="text" color={"dark"}  onClick={handleEditUserName} >
+                              <Icon>edit username</Icon>&nbsp;<span id="edit-username-text">edit username</span>
                             </MDButton>
                           </MDBox>
                         </MDBox>
@@ -211,20 +254,20 @@ function Overview({history}) {
                           <MDTypography variant="caption" color="text">
                             Email Address:&nbsp;&nbsp;&nbsp;
                             <MDTypography variant="caption" fontWeight="medium">
-                              Email
+                              {userEmail}
                             </MDTypography>
                           </MDTypography>
                         </MDBox>
-                        <MDBox mb={1} lineHeight={0} id="password-box" >
+                        <MDBox mb={1} lineHeight={0}    id="username-box">
                          
-                          <MDTypography variant="caption" color="text" >
+                          {/* <MDTypography variant="caption" color="text" >
                             Password:&nbsp;&nbsp;&nbsp;
                             
-                            <MDTypography variant="caption" fontWeight="medium" id="password-text">
+                            <MDTypography variant="caption" fontWeight="medium">
                               Password
                             </MDTypography>
                             &nbsp;&nbsp;
-                          </MDTypography>
+                          </MDTypography> */}
                          
                         </MDBox>
                       </MDBox>
