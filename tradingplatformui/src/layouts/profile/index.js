@@ -44,9 +44,44 @@ import profilesListData from "layouts/profile/data/profilesListData";
 
 // Images
 import Billing from "layouts/billing";
+import { useNavigate } from 'react-router-dom';
 
-function Overview() {
+const SERVER_API = "http://127.0.0.1:8000/app/";
+
+function Overview({history}) {
   const [tabValue, setTabValue] = useState("");
+  let navigate = useNavigate();
+
+  const handleDeleteAccount = async() =>{
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ "email" : "test4@gmail.com" })
+    };
+
+    try {
+      const response = await fetch( SERVER_API + "deleteaccount/", requestOptions);
+      if (response.ok) {
+        alert("Account is deleted");
+        navigate("/authentication/sign-in");
+      }
+    }catch(error){
+      alert("Delete failed");
+    }
+  }
+
+  const handleEditPassword = () => {
+    let passwordText = document.getElementById("password-text");
+    passwordText.innerHTML = '<input value="' +  passwordText.innerText + '">';
+
+    let passwordBox = document.getElementById("password-box");
+    let submitButton = document.createElement("Button");
+    submitButton.innerText = "Update"
+    
+    passwordBox.appendChild(submitButton)
+  }
 
   return (
     <DashboardLayout>
@@ -162,13 +197,12 @@ function Overview() {
 
                           <MDBox display="flex" alignItems="center">
                             <MDBox mr={1}>
-                              <MDButton variant="text" color="error">
-                                <Icon>delete account</Icon>&nbsp;delete account
+                              <MDButton variant="text" color="error" onClick={handleDeleteAccount}>
+                                <Icon >delete account</Icon>&nbsp;delete account
                               </MDButton>
                             </MDBox>
-
-                            <MDButton variant="text" color={"dark"}>
-                              <Icon>edit password</Icon>&nbsp;edit password
+                            <MDButton variant="text" color={"dark"}  onClick={handleEditPassword} >
+                              <Icon>edit password</Icon>&nbsp;<span id="edit-password-text">edit password</span>
                             </MDButton>
                           </MDBox>
                         </MDBox>
@@ -181,13 +215,17 @@ function Overview() {
                             </MDTypography>
                           </MDTypography>
                         </MDBox>
-                        <MDBox mb={1} lineHeight={0}>
-                          <MDTypography variant="caption" color="text">
+                        <MDBox mb={1} lineHeight={0} id="password-box" >
+                         
+                          <MDTypography variant="caption" color="text" >
                             Password:&nbsp;&nbsp;&nbsp;
-                            <MDTypography variant="caption" fontWeight="medium">
+                            
+                            <MDTypography variant="caption" fontWeight="medium" id="password-text">
                               Password
                             </MDTypography>
+                            &nbsp;&nbsp;
                           </MDTypography>
+                         
                         </MDBox>
                       </MDBox>
                     </MDBox>

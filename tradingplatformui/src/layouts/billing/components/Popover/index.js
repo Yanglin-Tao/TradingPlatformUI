@@ -104,7 +104,7 @@ const PopoverElement = () => {
                         max: 500, min: 0
                     }
                 }}
-                label="quantity"
+                label="Quantity"
             />
             <br/>
           <div style={{display:'inline-block', margin:2, backgroundColor:'white'}}>
