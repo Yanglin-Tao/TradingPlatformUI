@@ -33,7 +33,7 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 import PopoverElement from "layouts/billing/components/Popover";
 
 import Cookies from 'js-cookie';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Dashboard() {
   const stockData = [
@@ -111,18 +111,39 @@ function Dashboard() {
     }
   ];
 
+  const [stockPrices, setStockPrices] = useState([]);
+
   useEffect(() => {
-    const checkCookie = () => {
+    const getStockPrices = async () => {
       const userEmail = Cookies.get('userEmail');
-      if (userEmail) {
-        console.log('User email cookie:', userEmail);
-      } else {
-        console.log('User email cookie is not set');
+      const apiUrl = `http://127.0.0.1:8000/app/get-prices/`;
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: userEmail,
+        }),
+      };
+
+      try {
+        const response = await fetch(apiUrl, requestOptions);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data);
+        setStockPrices(data.prices)
+      } catch (error) {
+        console.error(
+          'There was a problem fetching stock prices:',
+          error
+        );
       }
     };
-    checkCookie();
+    // getStockPrices();
   }, []);
-
 
   return (
     <DashboardLayout>
