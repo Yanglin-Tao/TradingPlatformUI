@@ -25,8 +25,45 @@ import MDTypography from "components/MDTypography";
 
 // Billing page components
 import Transaction from "layouts/billing/components/Transaction";
+import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 function Transactions() {
+
+  const [orderHistory, setOrderHistory] = useState([]);
+
+  useEffect(() => {
+    const getOrderHistory = async () => {
+      const userEmail = Cookies.get('userEmail');
+      const apiUrl = `http://127.0.0.1:8000/app/history/`;
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: userEmail,
+        }),
+      };
+
+      try {
+        const response = await fetch(apiUrl, requestOptions);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data);
+        setOrderHistory(data.orders)
+      } catch (error) {
+        console.error(
+          'There was a problem fetching order history:',
+          error
+        );
+      }
+    };
+    getOrderHistory();
+  }, []);
+
   return (
     <Card sx={{ height: "100%", width: '100%'}}>
       <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={3} px={2}>
@@ -39,9 +76,6 @@ function Transactions() {
               date_range
             </Icon>
           </MDBox>
-          <MDTypography variant="button" color="text" fontWeight="regular">
-            23 - 30 March 2020
-          </MDTypography>
         </MDBox>
       </MDBox>
       <MDBox pt={3} pb={2} px={2}>
@@ -58,62 +92,18 @@ function Transactions() {
           m={0}
           sx={{ listStyle: "none" }}
         >
-          <Transaction
-            color="error"
-            icon="expand_more"
-            name="Netflix"
-            description="27 March 2020, at 12:30 PM"
-            value="- $ 2,500"
-          />
-          <Transaction
-            color="success"
-            icon="expand_less"
-            name="Apple"
-            description="27 March 2020, at 04:30 AM"
-            value="+ $ 2,000"
-          />
-        </MDBox>
-        <MDBox mt={1} mb={2}>
-          <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
-            yesterday
-          </MDTypography>
-        </MDBox>
-        <MDBox
-          component="ul"
-          display="flex"
-          flexDirection="column"
-          p={0}
-          m={0}
-          sx={{ listStyle: "none" }}
-        >
-          <Transaction
-            color="success"
-            icon="expand_less"
-            name="Stripe"
-            description="26 March 2020, at 13:45 PM"
-            value="+ $ 750"
-          />
-          <Transaction
-            color="success"
-            icon="expand_less"
-            name="HubSpot"
-            description="26 March 2020, at 12:30 PM"
-            value="+ $ 1,000"
-          />
-          <Transaction
-            color="success"
-            icon="expand_less"
-            name="Creative Tim"
-            description="26 March 2020, at 08:30 AM"
-            value="+ $ 2,500"
-          />
-          <Transaction
-            color="dark"
-            icon="priority_high"
-            name="Webflow"
-            description="26 March 2020, at 05:00 AM"
-            value="Pending"
-          />
+          {orderHistory.map((order, index) => (
+            <Transaction
+              key={index}
+              color={order.order_operation === 'buy' ? 'error' : 'success'}
+              icon={order.order_operation === 'buy' ? 'expand_more' : 'expand_less'}
+              name={order.symbol}
+              description={new Date(order.time).toLocaleString()}
+              quantity={order.quantity.toString()}
+              price={order.stock_price.toString()}
+              value={`${order.order_operation === 'buy' ? '-' : '+'} $ ${order.total_price.toFixed(2)}`}
+            />
+          ))}
         </MDBox>
       </MDBox>
     </Card>

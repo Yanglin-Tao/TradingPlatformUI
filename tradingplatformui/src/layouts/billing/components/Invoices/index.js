@@ -23,25 +23,76 @@ import MDButton from "components/MDButton";
 
 // Billing page components
 import Invoice from "layouts/billing/components/Invoice";
+import React, { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 function Invoices() {
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [dailySpread, setDailySpread] = useState({});
+
+  useEffect(() => {
+    const getOrderHistory = async () => {
+      const userEmail = Cookies.get('userEmail');
+      const apiUrl = `http://127.0.0.1:8000/app/history/`;
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: userEmail,
+        }),
+      };
+
+      try {
+        const response = await fetch(apiUrl, requestOptions);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data);
+        setOrderHistory(data.orders)
+        calculateDailySpread(data.orders);
+      } catch (error) {
+        console.error(
+          'There was a problem fetching order history:',
+          error
+        );
+      }
+    };
+    getOrderHistory();
+  }, []);
+
+  const calculateDailySpread = (orders) => {
+    const spread = {};
+    orders.forEach(order => {
+      const date = new Date(order.time).toISOString().split('T')[0]; // Extract date part
+      const value = order.order_operation === 'buy' ? -order.total_price : order.total_price;
+      if (spread[date]) {
+        spread[date] += value;
+      } else {
+        spread[date] = value;
+      }
+    });
+    setDailySpread(spread);
+  };
+
   return (
     <Card sx={{ height: "100%" }}>
       <MDBox pt={2} px={2} display="flex" justifyContent="space-between" alignItems="center">
         <MDTypography variant="h6" fontWeight="medium">
-          Invoices
+          Spread Summary
         </MDTypography>
-        <MDButton variant="outlined" color="info" size="small">
-          view all
-        </MDButton>
       </MDBox>
       <MDBox p={2}>
         <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
-          <Invoice date="March, 01, 2020" id="#MS-415646" price="$180" />
-          <Invoice date="February, 10, 2021" id="#RV-126749" price="$250" />
-          <Invoice date="April, 05, 2020" id="#QW-103578" price="$120" />
-          <Invoice date="June, 25, 2019" id="#MS-415646" price="$180" />
-          <Invoice date="March, 01, 2019" id="#AR-803481" price="$300" noGutter />
+          {Object.entries(dailySpread).map(([date, spread], index) => (
+            <Invoice 
+              key={index}
+              date={new Date(date).toLocaleDateString()} 
+              price={`$${spread.toFixed(2)}`} 
+            />
+          ))}
         </MDBox>
       </MDBox>
     </Card>
