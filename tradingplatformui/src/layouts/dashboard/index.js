@@ -111,7 +111,13 @@ function Dashboard() {
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox py={3}>
+        <div sx={{float:"right"}}>
+            <PopoverElement sx={{float:"right"}} ibmData={ibmData} tslaData={tslaData} raceData={raceData} msftData={msftData}/>
+          </div>
+          <br/>
         <Grid container spacing={3}>
+
+
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
@@ -184,9 +190,6 @@ function Dashboard() {
             </MDBox>
           </Grid>
         </Grid>
-        <div sx={{float:"right"}}>
-          <PopoverElement sx={{float:"right"}} ibmData={ibmData} tslaData={tslaData} raceData={raceData} msftData={msftData}/>
-        </div>
         <MDBox mt={4.5}>
           <Grid container spacing={3}> 
             {stockData.length > 0? stockData.map((stock, index) => (

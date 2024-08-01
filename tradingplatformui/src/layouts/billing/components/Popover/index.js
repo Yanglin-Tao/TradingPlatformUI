@@ -95,7 +95,6 @@ const PopoverElement = ({ibmData, msftData, tslaData, raceData}) => {
   }
 
   const handleOperation = (event) =>{
-    alert(event.target.value)
     if (event.target.value === "buy"){
       setOperation("Buy");
     }
@@ -118,7 +117,6 @@ const PopoverElement = ({ibmData, msftData, tslaData, raceData}) => {
     };
     try {
       let response;
-      alert(operation)
       let apiUrl = operation === "Buy" ? SERVER_API + "buy/" : SERVER_API + "sell/"; 
       response = await fetch( apiUrl, requestOptions);
       if (response.ok){
