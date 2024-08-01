@@ -116,7 +116,7 @@ function Dashboard() {
   useEffect(() => {
     const getStockPrices = async () => {
       const userEmail = Cookies.get('userEmail');
-      const apiUrl = `http://127.0.0.1:8000/app/get-prices/`;
+      const apiUrl = `http://127.0.0.1:8000/app/price_history/`;
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -142,7 +142,7 @@ function Dashboard() {
         );
       }
     };
-    // getStockPrices();
+    getStockPrices();
   }, []);
 
   return (
