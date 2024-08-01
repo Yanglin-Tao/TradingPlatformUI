@@ -66,7 +66,7 @@ function Invoices() {
   const calculateDailySpread = (orders) => {
     const spread = {};
     orders.forEach(order => {
-      const date = new Date(order.time).toISOString().split('T')[0]; // Extract date part
+      const date = new Date(order.time).toLocaleDateString().split('T')[0]; // Extract date part
       const value = order.order_operation === 'buy' ? -order.total_price : order.total_price;
       if (spread[date]) {
         spread[date] += value;

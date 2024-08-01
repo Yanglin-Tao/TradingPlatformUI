@@ -59,9 +59,9 @@ const routes = [
   {
     type: "collapse",
     name: "Transactions",
-    key: "billing",
+    key: "transactions",
     icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/billing",
+    route: "/transactions",
     component: <TransactionsWrapper/>,
   },
   {
@@ -75,9 +75,9 @@ const routes = [
   {
     type: "collapse",
     name: "Contacts",
-    key: "tables",
+    key: "contacts",
     icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
+    route: "/contacts",
     component: <Tables />,
   },
   {
