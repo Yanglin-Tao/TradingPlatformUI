@@ -36,6 +36,10 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
 const SERVER_API = "http://127.0.0.1:8000/app/";
 
+function extractTimeFromLabels(labels) {
+  return labels.map(label => label.split('T')[1].split('-')[0]);
+}
+
 function Dashboard() {
   const [stockData, setStockData] = useState([])
   const [ibmData, setIbmData] = useState({})
@@ -66,30 +70,36 @@ function Dashboard() {
         const response = await fetch( SERVER_API + "price_history/", requestOptions);
         if (response.ok) {
           let data = await response.json();
-          setStockData(data["prices"]);
-            for (let priceData of data["prices"]) {
-              switch(priceData["datasets"]["label"]) {
-                case "IBM":
-                  setIbmData(priceData["datasets"]);
-                  break;
-                case "TSLA":
-                  setTslaData(priceData["datasets"]);
-                  break;
-                case "MSFT":
-                  setMsftData(priceData["datasets"]);
-                  break;
-                case "RACE":
-                  setRaceData(priceData["datasets"]);
-                  break;
-                default:
-                  break;
-              }
+          let prices = data["prices"];
+          prices.forEach(stock => {
+              stock.labels = extractTimeFromLabels(stock.labels);
+          });
+          setStockData(prices);
+          for (let priceData of data["prices"]) {
+            switch(priceData["datasets"]["label"]) {
+              case "IBM":
+                setIbmData(priceData["datasets"]);
+                break;
+              case "TSLA":
+                setTslaData(priceData["datasets"]);
+                break;
+              case "MSFT":
+                setMsftData(priceData["datasets"]);
+                break;
+              case "RACE":
+                setRaceData(priceData["datasets"]);
+                break;
+              default:
+                break;
             }
-          
+          }
       }
     }
       catch(error){
-        alert("Delete failed");
+        console.error(
+          'There was a problem fetching stock prices:',
+          error
+        );
       }
     }
 
@@ -100,32 +110,8 @@ function Dashboard() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <div sx={{float:"right"}}>
-        <PopoverElement sx={{float:"right"}} ibmData={ibmData} tslaData={tslaData} raceData={raceData} msftData={msftData}/>
-      </div>
-     
       <MDBox py={3}>
-        <MDBox mt={4.5}>
-          <Grid container spacing={3}> 
-            {stockData.length > 0? stockData.map((stock, index) => (
-              <Grid item xs={12} md={6} lg={4} key={index}>
-                <MDBox mb={3}>
-                  <ReportsLineChart
-                    color="dark"
-                    title={stock.datasets.label}
-                    date="updated 2 seconds ago"
-                    chart={stock}
-                  />
-                </MDBox>
-              </Grid>
-            )) : <></> }
-          </Grid>
-        </MDBox>
-
-    
         <Grid container spacing={3}>
-       
-
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
@@ -198,6 +184,25 @@ function Dashboard() {
             </MDBox>
           </Grid>
         </Grid>
+        <div sx={{float:"right"}}>
+          <PopoverElement sx={{float:"right"}} ibmData={ibmData} tslaData={tslaData} raceData={raceData} msftData={msftData}/>
+        </div>
+        <MDBox mt={4.5}>
+          <Grid container spacing={3}> 
+            {stockData.length > 0? stockData.map((stock, index) => (
+              <Grid item xs={12} md={6} lg={4} key={index}>
+                <MDBox mb={3}>
+                  <ReportsLineChart
+                    color="dark"
+                    title={stock.datasets.label}
+                    date="updated 2 seconds ago"
+                    chart={stock}
+                  />
+                </MDBox>
+              </Grid>
+            )) : <></> }
+          </Grid>
+        </MDBox>
       </MDBox>
     </DashboardLayout>
   );
