@@ -72,7 +72,7 @@ function PlatformSettings() {
             </MDTypography>
           </MDBox>
         </MDBox>
-        <MDBox mt={3}>
+        {/* <MDBox mt={3}>
           <MDTypography variant="caption" fontWeight="bold" color="text" textTransform="uppercase">
             application
           </MDTypography>
@@ -105,8 +105,8 @@ function PlatformSettings() {
             <MDTypography variant="button" fontWeight="regular" color="text">
               Subscribe to newsletter
             </MDTypography>
-          </MDBox>
-        </MDBox>
+          </MDBox> 
+        </MDBox>*/}
       </MDBox>
     </Card>
   );

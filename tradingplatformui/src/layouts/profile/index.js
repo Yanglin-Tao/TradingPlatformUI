@@ -129,7 +129,7 @@ function Overview() {
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox mb={2} />
-      <Header updateSelect={setTabValue}>
+      <Header updateSelect={setTabValue} userName={userName} userEmail={userEmail}>
         {(tabValue === "" || tabValue === "app") && (
           <>
             <MDBox mt={5} mb={3}>
@@ -142,7 +142,7 @@ function Overview() {
                   <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
                   <ProfileInfoCard
                     title="profile information"
-                    description="Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
+                    description=""
                     info={{
                       fullName: "Alec M. Thompson",
                       mobile: "(44) 123 1234 123",

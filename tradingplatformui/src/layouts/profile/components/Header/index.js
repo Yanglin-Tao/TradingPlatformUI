@@ -39,7 +39,7 @@ import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-profile.jpeg";
 import tab from "assets/theme/components/tabs/tab";
 
-function Header({ updateSelect, children }) {
+function Header({ updateSelect,  userName, userEmail, children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
 
@@ -110,10 +110,10 @@ function Header({ updateSelect, children }) {
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>
               <MDTypography variant="h5" fontWeight="medium">
-                Richard Davis
+                {userName}
               </MDTypography>
               <MDTypography variant="button" color="text" fontWeight="regular">
-                CEO / Co-Founder
+                
               </MDTypography>
             </MDBox>
           </Grid>
