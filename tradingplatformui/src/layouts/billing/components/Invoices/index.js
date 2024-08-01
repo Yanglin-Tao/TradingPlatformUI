@@ -33,7 +33,7 @@ function Invoices() {
   useEffect(() => {
     const getOrderHistory = async () => {
       const userEmail = Cookies.get('userEmail');
-      const apiUrl = `http://127.0.0.1:8000/app/history/`;
+      const apiUrl = `http://127.0.0.1:8000/app/order_history/`;
       const requestOptions = {
         method: 'POST',
         headers: {
