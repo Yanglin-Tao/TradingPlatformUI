@@ -33,83 +33,15 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 import PopoverElement from "layouts/billing/components/Popover";
 
 import Cookies from 'js-cookie';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+const SERVER_API = "http://127.0.0.1:8000/app/";
 
 function Dashboard() {
-  const stockData = [
-    {
-      labels: [
-        "00:00:00",
-        "00:00:02", 
-        "00:00:04", 
-        "00:00:06", 
-        "00:00:08", 
-        "00:00:10", 
-        "00:00:12", 
-        "00:00:14", 
-        "00:00:16", 
-        "00:00:18"
-      ],
-      datasets: {
-        label: "IBM",
-        data: [181.44, 182.44, 183.44, 181.44, 183.44, 181.44, 184.44, 182.44, 183.44]
-      }
-    },
-    {
-      labels: [
-        "00:00:00",
-        "00:00:02", 
-        "00:00:04", 
-        "00:00:06", 
-        "00:00:08", 
-        "00:00:10", 
-        "00:00:12", 
-        "00:00:14", 
-        "00:00:16", 
-        "00:00:18"
-      ],
-      datasets: {
-        label: "MSFT",
-        data: [407.73, 401.73, 406.73, 405.73, 402.73, 403.73, 401.73, 406.73, 405.73]
-      }
-    },
-    {
-      labels: [
-        "00:00:00",
-        "00:00:02", 
-        "00:00:04", 
-        "00:00:06", 
-        "00:00:08", 
-        "00:00:10", 
-        "00:00:12", 
-        "00:00:14", 
-        "00:00:16", 
-        "00:00:18"
-      ],
-      datasets: {
-        label: "TSLA",
-        data: [141.73, 144.73, 142.73, 141.73, 143.73, 141.73, 144.73, 143.73, 144.73]
-      }
-    },
-    {
-      labels: [
-        "00:00:00",
-        "00:00:02", 
-        "00:00:04", 
-        "00:00:06", 
-        "00:00:08", 
-        "00:00:10", 
-        "00:00:12", 
-        "00:00:14", 
-        "00:00:16", 
-        "00:00:18"
-      ],
-      datasets: {
-        label: "RACE",
-        data: [425.6, 426.6, 427.6, 423.6, 422.6, 423.6, 424.6, 426.6, 421.6]
-      }
-    }
-  ];
+  const [stockData, setStockData] = useState([])
+  const [ibmData, setIbmData] = useState({})
+  const [tslaData, setTslaData] = useState({})
+  const [msftData, setMsftData] = useState({})
+  const [raceData, setRaceData] = useState({})
 
   useEffect(() => {
     const checkCookie = () => {
@@ -121,6 +53,48 @@ function Dashboard() {
       }
     };
     checkCookie();
+
+    const fetchStockData = async() =>{
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      };
+  
+      try {
+        const response = await fetch( SERVER_API + "price_history/", requestOptions);
+        if (response.ok) {
+          let data = await response.json();
+          setStockData(data["prices"]);
+            for (let priceData of data["prices"]) {
+              switch(priceData["datasets"]["label"]) {
+                case "IBM":
+                  setIbmData(priceData["datasets"]);
+                  break;
+                case "TSLA":
+                  setTslaData(priceData["datasets"]);
+                  break;
+                case "MSFT":
+                  setMsftData(priceData["datasets"]);
+                  break;
+                case "RACE":
+                  setRaceData(priceData["datasets"]);
+                  break;
+                default:
+                  break;
+              }
+            }
+          
+      }
+    }
+      catch(error){
+        alert("Delete failed");
+      }
+    }
+
+    fetchStockData();
+    console.log(ibmData)
   }, []);
 
 
@@ -128,13 +102,13 @@ function Dashboard() {
     <DashboardLayout>
       <DashboardNavbar />
       <div sx={{float:"right"}}>
-        <PopoverElement sx={{float:"right"}}/>
+        <PopoverElement sx={{float:"right"}} ibmData={ibmData} tslaData={tslaData} raceData={raceData} msftData={msftData}/>
       </div>
      
       <MDBox py={3}>
         <MDBox mt={4.5}>
           <Grid container spacing={3}> 
-            {stockData.map((stock, index) => (
+            {stockData.length > 0? stockData.map((stock, index) => (
               <Grid item xs={12} md={6} lg={4} key={index}>
                 <MDBox mb={3}>
                   <ReportsLineChart
@@ -145,7 +119,7 @@ function Dashboard() {
                   />
                 </MDBox>
               </Grid>
-            ))}
+            )) : <></> }
           </Grid>
         </MDBox>
 
@@ -159,14 +133,14 @@ function Dashboard() {
                 color="dark"
                 icon="ibm-svgrepo-com.svg"
                 title="IBM"
-                count={192.3}
+                count={ibmData["data"]? ibmData["data"][ibmData["data"].length-1] : -1}
                 highest={{
                    color: "success",
-                   amount: "180.6",
+                   amount: ibmData["highest_price"],
                  }}
                 lowest={{
                   color: "error",
-                  amount: "203.1",
+                  amount: ibmData["lowest_price"],
                 }}
               />
             </MDBox>
@@ -176,14 +150,14 @@ function Dashboard() {
               <ComplexStatisticsCard
                 icon="microsoft-logo.svg"
                 title="MSFT"
-                count="423.8"
+                count={msftData["data"]? msftData["data"][msftData["data"].length-1]: -1}
                 highest={{
                   color: "success",
-                  amount: "410.6",
+                  amount: msftData["highest_price"],
                 }}
                lowest={{
                  color: "error",
-                 amount: "431.1",
+                 amount: msftData["lowest_price"],
                }}
               />
             </MDBox>
@@ -194,14 +168,14 @@ function Dashboard() {
                 color="success"
                 icon="tesla.svg"
                 title="TSLA"
-                count="216.92"
+                count={tslaData["data"] ? tslaData["data"][tslaData["data"].length-1]: -1}
                 highest={{
                   color: "success",
-                  amount: "188.6",
+                  amount: tslaData["highest_price"],
                 }}
                lowest={{
                  color: "error",
-                 amount: "230.1",
+                 amount: tslaData["lowest_price"],
                }}
               />
             </MDBox>
@@ -212,14 +186,14 @@ function Dashboard() {
                 color="primary"
                 icon="race.jpg"
                 title="RACE"
-                count="412.65"
+                count={raceData["data"]? raceData["data"][raceData["data"].length-1]: -1}
                 highest={{
                   color: "success",
-                  amount: "450.2",
+                  amount: raceData["highest_price"],
                 }}
                lowest={{
                  color: "error",
-                 amount: "410.1",
+                 amount: raceData["lowest_price"],
                }}
               />
             </MDBox>

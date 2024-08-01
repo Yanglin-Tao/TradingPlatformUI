@@ -39,11 +39,12 @@ const CustomButton = styled(Button)(({ theme }) => ({
 
 
 
-const PopoverElement = () => {
+const PopoverElement = ({ibmData, msftData, tslaData, raceData}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [symbol, setSymbol] = useState("");
   const [operation, setOperation] = useState(null); 
   const [quantity, setQuantity] = useState(0);
+  const [price, setPrice] = useState(0);
   const [email, setEmail] = useState("");
 
   useEffect(()=> {
@@ -69,6 +70,23 @@ const PopoverElement = () => {
 
   const handleChange = (event) => {
     setSymbol(event.target.value)
+    switch(event.target.value){
+      case "ibm":
+        setPrice(ibmData["data"][ibmData["data"].length-1]);
+        break;
+      case "tsla":
+        setPrice(tslaData["data"][tslaData["data"].length-1]);
+        break;
+      case "msft":
+        setPrice(msftData["data"][msftData["data"].length-1]);
+        break;
+      case "race":
+        setPrice(raceData["data"][raceData["data"].length-1]);
+        break;
+      default:
+        break;
+    }
+  
   }
 
   const handleOperation = (event) =>{
@@ -183,7 +201,10 @@ const PopoverElement = () => {
                 variant="standard"
                 type="number"
                 label="Price"
-                value="100"
+                value={price}
+                inputProps={
+                  { readOnly: true }
+              }
               />
               <br/>
           <div style={{display:'inline-block', margin:2, backgroundColor:'white'}}>
