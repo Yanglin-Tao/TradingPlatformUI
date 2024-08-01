@@ -115,7 +115,7 @@ function Dashboard() {
             <PopoverElement sx={{float:"right"}} ibmData={ibmData} tslaData={tslaData} raceData={raceData} msftData={msftData}/>
           </div>
           <br/>
-        <Grid container spacing={3}>
+        <Grid container spacing={6}>
 
 
           <Grid item xs={12} md={6} lg={3}>
@@ -193,8 +193,8 @@ function Dashboard() {
         <MDBox mt={4.5}>
           <Grid container spacing={3}> 
             {stockData.length > 0? stockData.map((stock, index) => (
-              <Grid item xs={12} md={6} lg={4} key={index}>
-                <MDBox mb={3}>
+              <Grid item xs={6} key={index}>
+                <MDBox mb={1.5}>
                   <ReportsLineChart
                     color="dark"
                     title={stock.datasets.label}
