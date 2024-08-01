@@ -12,7 +12,7 @@ Coded by www.creative-tim.com
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
@@ -44,9 +44,86 @@ import profilesListData from "layouts/profile/data/profilesListData";
 
 // Images
 import Billing from "layouts/billing";
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+
+const SERVER_API = "http://127.0.0.1:8000/app/";
 
 function Overview() {
   const [tabValue, setTabValue] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  let navigate = useNavigate();
+ 
+  useEffect( ()=>{
+    const checkCookie = async() => {
+      const email = Cookies.get('userEmail');
+      if (email) {
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body :JSON.stringify({
+            "email" : email
+          })
+        };
+        try {
+          const response = await fetch( SERVER_API + "userprofile/", requestOptions);
+          let data = await response.json();
+          let message = data.message;
+
+          if (message === "Here is the user profile") {
+            setUserName(data.user.username);
+            setUserEmail(email)
+          }
+        }catch(error){
+          alert("No user found");
+        }
+
+      } else {
+        console.log('User email cookie is not set');
+      }
+    };
+    checkCookie();
+  }, [])
+
+  const handleDeleteAccount = async() =>{
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ "email" : "test4@gmail.com" })
+    };
+
+    try {
+      const response = await fetch( SERVER_API + "deleteaccount/", requestOptions);
+      if (response.ok) {
+        alert("Account is deleted");
+        navigate("/authentication/sign-in");
+      }
+    }catch(error){
+      alert("Delete failed");
+    }
+  }
+
+  const handleEditUserName = () => {
+    let usernameText = document.getElementById("username-text");
+    if (usernameText.innerText !== ""){
+      usernameText.innerHTML = '<input style="height:30px" value="' +  usernameText.innerText + '">';
+
+      let passwordBox = document.getElementById("username-box");
+      let submitButton = document.createElement("Button");
+      submitButton.innerText = "Update"
+  
+      let editText = document.getElementById("edit-username-text");
+      editText.innerText = "Update Username"
+      
+      //passwordBox.appendChild(submitButton)
+    }
+   
+  }
 
   return (
     <DashboardLayout>
@@ -156,19 +233,19 @@ function Overview() {
                             variant="button"
                             fontWeight="medium"
                             textTransform="capitalize"
+                            id="username-text"
                           >
-                            "Name"
+                            {userName}
                           </MDTypography>
 
                           <MDBox display="flex" alignItems="center">
                             <MDBox mr={1}>
-                              <MDButton variant="text" color="error">
-                                <Icon>delete account</Icon>&nbsp;delete account
+                              <MDButton variant="text" color="error" onClick={handleDeleteAccount}>
+                                <Icon >delete account</Icon>&nbsp;delete account
                               </MDButton>
                             </MDBox>
-
-                            <MDButton variant="text" color={"dark"}>
-                              <Icon>edit password</Icon>&nbsp;edit password
+                            <MDButton variant="text" color={"dark"}  onClick={handleEditUserName} >
+                              <Icon>edit username</Icon>&nbsp;<span id="edit-username-text">edit username</span>
                             </MDButton>
                           </MDBox>
                         </MDBox>
@@ -177,17 +254,21 @@ function Overview() {
                           <MDTypography variant="caption" color="text">
                             Email Address:&nbsp;&nbsp;&nbsp;
                             <MDTypography variant="caption" fontWeight="medium">
-                              Email
+                              {userEmail}
                             </MDTypography>
                           </MDTypography>
                         </MDBox>
-                        <MDBox mb={1} lineHeight={0}>
-                          <MDTypography variant="caption" color="text">
+                        <MDBox mb={1} lineHeight={0}    id="username-box">
+                         
+                          {/* <MDTypography variant="caption" color="text" >
                             Password:&nbsp;&nbsp;&nbsp;
+                            
                             <MDTypography variant="caption" fontWeight="medium">
                               Password
                             </MDTypography>
-                          </MDTypography>
+                            &nbsp;&nbsp;
+                          </MDTypography> */}
+                         
                         </MDBox>
                       </MDBox>
                     </MDBox>
