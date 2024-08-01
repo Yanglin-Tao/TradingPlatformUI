@@ -9,6 +9,11 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import { red, green, blue } from '@mui/material/colors';
 import Cookies from 'js-cookie';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+
 const SERVER_API = "http://127.0.0.1:8000/app/";
 
 const BuyButton = styled(Button)(({ theme }) => ({
@@ -42,7 +47,7 @@ const CustomButton = styled(Button)(({ theme }) => ({
 const PopoverElement = ({ibmData, msftData, tslaData, raceData}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [symbol, setSymbol] = useState("");
-  const [operation, setOperation] = useState(null); 
+  const [operation, setOperation] = useState("Buy"); 
   const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
   const [email, setEmail] = useState("");
@@ -90,6 +95,7 @@ const PopoverElement = ({ibmData, msftData, tslaData, raceData}) => {
   }
 
   const handleOperation = (event) =>{
+    alert(event.target.value)
     if (event.target.value === "buy"){
       setOperation("Buy");
     }
@@ -112,6 +118,7 @@ const PopoverElement = ({ibmData, msftData, tslaData, raceData}) => {
     };
     try {
       let response;
+      alert(operation)
       let apiUrl = operation === "Buy" ? SERVER_API + "buy/" : SERVER_API + "sell/"; 
       response = await fetch( apiUrl, requestOptions);
       if (response.ok){
@@ -208,8 +215,16 @@ const PopoverElement = ({ibmData, msftData, tslaData, raceData}) => {
               />
               <br/>
           <div style={{display:'inline-block', margin:2, backgroundColor:'white'}}>
-            <BuyButton value={"buy"} onClick={handleOperation}>Buy</BuyButton>
-            <SellButton value={"sell"} onClick={handleOperation}>Sell</SellButton>
+            <FormLabel id="demo-radio-buttons-group-label">Option</FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="buy"
+              name="radio-buttons-group"
+              onChange={handleOperation}
+            >
+              <FormControlLabel value="buy" control={<Radio />} label="Buy" />
+              <FormControlLabel value="sell" control={<Radio />} label="Sell" />
+            </RadioGroup>
           </div>
           <br/>
           <CustomButton variant="contained" size="medium" onClick={handleSubmit}>
