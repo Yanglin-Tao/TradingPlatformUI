@@ -94,7 +94,6 @@ function Dashboard() {
     }
 
     fetchStockData();
-    console.log(ibmData)
   }, []);
 
 

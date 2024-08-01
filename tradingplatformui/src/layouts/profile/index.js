@@ -94,7 +94,7 @@ function Overview() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ "email" : "test4@gmail.com" })
+      body: JSON.stringify({ "email" : userEmail })
     };
 
     try {
