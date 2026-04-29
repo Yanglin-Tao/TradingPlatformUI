@@ -1,5 +1,5 @@
-# Trade Platform UI
-A React-based web user interface for the online trading platform.
+# Toy Trade Platform UI
+A React-based web user interface for the toy trading platform.
 
 ## Development Setup
 ### Install Node.js and npm
